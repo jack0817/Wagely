@@ -20,6 +20,7 @@ struct AppView: View {
                 ) { view(for: tab) }
             }
         }
+        .theme(.standard)
         .onAppear(perform: appStore.initializeApp)
     }
     

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct HomeView: View {
     @State private var homeNavStore = HomeNavigationStore()
+    @Environment(\.theme) private var theme
     
     var body: some View {
         NavigationStack(path: homeNavStore.binding(for: \.stack)) {
@@ -26,14 +27,17 @@ struct HomeView: View {
     
     func mainContent() -> some View {
         VStack {
-            Button("Test Navigation") {
-                homeNavStore.navigate(to: .details)
+            GeometryReader { geo in
+                Color.white
             }
+            .frame(height: 200.0)
             
             Button("Test Presentation") {
                 homeNavStore.present(.congrats)
             }
         }
+        .frame(maxHeight: .infinity, alignment: .topLeading)
+        .background(theme.color(.background).edgesIgnoringSafeArea(.all))
         .navigationTitle("Wagely")
     }
     
@@ -57,4 +61,5 @@ struct HomeView: View {
 
 #Preview {
     HomeView()
+        .background(Theme(.standard).color(.background))
 }

@@ -11,14 +11,14 @@ public struct StandardTheme: ThemeProvider {
     func color(_ themeColor: Theme.Color) -> SwiftUI.Color {
         switch themeColor {
         case .background:
-            .white
+            .init("Colors/Standard/background")
         }
     }
     
     func font(_ themeFont: Theme.Font) -> SwiftUI.Font {
         switch themeFont {
         case .body:
-                .body
+            .body
         }
     }
 }
