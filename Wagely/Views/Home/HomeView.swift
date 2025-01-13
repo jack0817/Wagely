@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct HomeView: View {
-    @State private var homeNavStore = HomeNavigationStore()
+    @Environment(WagelyStore.self) private var wagelyStore
     @Environment(\.theme) private var theme
+    @State private var homeNavStore = HomeNavigationStore()
     
     var body: some View {
         NavigationStack(path: homeNavStore.binding(for: \.stack)) {
@@ -26,17 +27,20 @@ struct HomeView: View {
     }
     
     func mainContent() -> some View {
-        VStack {
-            GeometryReader { geo in
-                Color.white
+        GeometryReader { geo in
+            VStack {
+                MonthSelectorView(
+                    selectedMonth: wagelyStore.binding(for: \.selectedMonth),
+                    in: geo.size
+                )
+                
+                Button("Test Presentation") {
+                    homeNavStore.present(.congrats)
+                }
             }
-            .frame(height: 200.0)
-            
-            Button("Test Presentation") {
-                homeNavStore.present(.congrats)
-            }
+            .frame(maxHeight: .infinity, alignment: .top)
+            .animation(.easeInOut, value: wagelyStore.selectedMonth)
         }
-        .frame(maxHeight: .infinity, alignment: .topLeading)
         .background(theme.color(.background).edgesIgnoringSafeArea(.all))
         .navigationTitle("Wagely")
     }
@@ -62,4 +66,5 @@ struct HomeView: View {
 #Preview {
     HomeView()
         .background(Theme(.standard).color(.background))
+        .environment(WagelyStore())
 }

@@ -12,6 +12,8 @@ public struct StandardTheme: ThemeProvider {
         switch themeColor {
         case .background:
             .init("Colors/Standard/background")
+        case .backgroundInverse:
+            .init("Colors/Standard/background.inverse")
         }
     }
     

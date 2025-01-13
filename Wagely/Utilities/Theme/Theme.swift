@@ -31,6 +31,7 @@ struct Theme {
 extension Theme {
     enum Color {
         case background
+        case backgroundInverse
     }
 }
 
