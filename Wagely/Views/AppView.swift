@@ -17,9 +17,7 @@ struct AppView: View {
                     tab.title,
                     systemImage: tab.systemImageName,
                     value: tab
-                ) {
-                    view(for: tab)
-                }
+                ) { view(for: tab) }
             }
         }
     }
