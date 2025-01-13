@@ -1,0 +1,15 @@
+{
+  "originHash" : "9d3725db1e16a4512b7666b4bcdf05751493f5a97e93406ddd78e92d739bdad5",
+  "pins" : [
+    {
+      "identity" : "asyncstore",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/jack0817/AsyncStore.git",
+      "state" : {
+        "branch" : "v1",
+        "revision" : "cf83749f2741c8e8283172fe8aecb5057b1bd9c9"
+      }
+    }
+  ],
+  "version" : 3
+}
