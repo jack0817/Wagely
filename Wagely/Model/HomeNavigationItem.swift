@@ -6,3 +6,11 @@
 //
 
 import Foundation
+
+public enum HomeNavigationItem: String {
+    case details
+}
+
+extension HomeNavigationItem: Identifiable {
+    public var id: String { rawValue }
+}

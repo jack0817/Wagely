@@ -16,11 +16,18 @@ public enum AppStoreKey: AsyncTaskKey {
 // MARK: State
 
 public struct AppState {
-    public var tabs: [AppTab] = [.home, .settings]
-    public var selectedTab: AppTab = .home
+    public var isAppInitialized: Bool
+    public var tabs: [AppTab]
+    public var selectedTab: AppTab
     
-    public init() {
-        
+    public init(
+        isAppInitialized: Bool = false,
+        tabs: [AppTab] = [.home, .settings],
+        selectedTab: AppTab = .home
+    ) {
+        self.isAppInitialized = isAppInitialized
+        self.tabs = tabs
+        self.selectedTab = selectedTab
     }
 }
 
@@ -36,9 +43,7 @@ public extension AppStore {
     }
 
     func initializeApp() {
-        receive(
-            .task(.initializeApp, initializeApp)
-        )
+        receive(.task(.initializeApp, initializeApp))
     }
 }
 
@@ -46,7 +51,7 @@ public extension AppStore {
 
 fileprivate extension AppStore {
     func initializeApp() async throws -> Effect {
-        return .none
+        return .set(\.isAppInitialized, to: true)
     }
 }
 
@@ -55,7 +60,8 @@ fileprivate extension AppStore {
 fileprivate extension AppStore {
     struct ErrorHandler {
         func handle(_ error: Error) -> Effect {
-            .none
+            print("[AppStore] error \(error)")
+            return .none
         }
     }
 }

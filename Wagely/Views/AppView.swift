@@ -20,6 +20,7 @@ struct AppView: View {
                 ) { view(for: tab) }
             }
         }
+        .onAppear(perform: appStore.initializeApp)
     }
     
     @ViewBuilder func view(for tab: AppTab) -> some View {
