@@ -17,7 +17,7 @@ public enum AppStoreKey: AsyncTaskKey {
 
 public struct AppState {
     public var tabs: [AppTab] = [.home, .settings]
-    public var selectedTab: AppTab? = .none
+    public var selectedTab: AppTab = .home
     
     public init() {
         

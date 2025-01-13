@@ -11,7 +11,7 @@ struct AppView: View {
     @Environment(AppStore.self) private var appStore
     
     var body: some View {
-        TabView(selection: .constant(appStore.selectedTab)) {
+        TabView(selection: appStore.binding(for: \.selectedTab)) {
             ForEach(appStore.tabs) { tab in
                 Tab(
                     tab.title,
