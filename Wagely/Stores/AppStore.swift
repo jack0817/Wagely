@@ -51,7 +51,21 @@ public extension AppStore {
 
 fileprivate extension AppStore {
     func initializeApp() async throws -> Effect {
+        setLogLevel()
+        try await env.persistence.initializeDatabase()
         return .set(\.isAppInitialized, to: true)
+    }
+}
+
+// MARK: Utilities
+
+fileprivate extension AppStore {
+    func setLogLevel() {
+#if DEBUG
+        Log.setLevel(to: .info)
+#else
+        Log.setLevel(to: .debug)
+#endif
     }
 }
 

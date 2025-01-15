@@ -14,6 +14,8 @@ public struct SSOT: ViewModifier {
     public init () {
         appStore = .init()
         wagelyStore = .init()
+        
+        wagelyStore.bind(to: appStore)
     }
     
     public func body(content: Content) -> some View {
