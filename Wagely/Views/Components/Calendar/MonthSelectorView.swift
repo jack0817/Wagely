@@ -31,18 +31,32 @@ struct MonthSelectorView: View {
     }
     
     func headerView() -> some View {
-        HStack {
-            Button("Back") {
-                selectedMonth = selectedMonth.firstOfMonth().add(months: -1)
+        VStack {
+            ZStack {
+                HStack {
+                    Button("Back") {
+                        selectedMonth = selectedMonth.firstOfMonth().add(months: -1)
+                    }
+                    
+                    Spacer()
+                    
+                    Button("Home") {
+                        selectedMonth = Date.now.firstOfMonth()
+                    }
+                    
+                    Button("Next") {
+                        selectedMonth = selectedMonth.firstOfMonth().add(months: 1)
+                    }
+                }
+                
+                Text(selectedMonth.firstOfMonth(), format: .dateTime.month(.wide))
+                    .font(.title)
+                    .frame(maxWidth: .infinity)
             }
             
-            Text(selectedMonth.firstOfMonth(), format: .dateTime.month(.wide))
-                .font(.title)
+            Text(selectedMonth, format: .dateTime.year())
+                .font(.caption)
                 .frame(maxWidth: .infinity)
-            
-            Button("Next") {
-                selectedMonth = selectedMonth.firstOfMonth().add(months: 1)
-            }
         }
     }
     
