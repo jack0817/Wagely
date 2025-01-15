@@ -78,7 +78,7 @@ fileprivate extension HomeNavigationStore {
 fileprivate extension HomeNavigationStore {
     struct ErrorHandler {
         func handle(_ error: Error) -> Effect {
-            print("[HomeNavigationStore] \(error)")
+            Log.error("[HomeNavigationStore] \(error)")
             return .none
         }
     }

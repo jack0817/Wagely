@@ -74,7 +74,7 @@ fileprivate extension AppStore {
 fileprivate extension AppStore {
     struct ErrorHandler {
         func handle(_ error: Error) -> Effect {
-            print("[AppStore] error \(error)")
+            Log.error("[AppStore] error \(error)")
             return .none
         }
     }

@@ -38,7 +38,7 @@ fileprivate extension SharedDataStore {
 fileprivate extension SharedDataStore {
     struct ErrorHandler {
         func handle(_ error: Error) -> Effect {
-            print("[SharedDataStore] error \(error)")
+            Log.error("[SharedDataStore] error \(error)")
             return .none
         }
     }

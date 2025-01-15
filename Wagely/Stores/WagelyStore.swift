@@ -45,7 +45,7 @@ public extension WagelyStore {
     }
 }
 
-// MARK: Private API
+// MARK: Tasks
 
 fileprivate extension WagelyStore {
     func bindToAppStoreTask(_ appStore: AppStore) async throws -> Effect {
@@ -63,6 +63,11 @@ fileprivate extension WagelyStore {
         let accounts = try await env.persistence.fetch(Account.self)
         return .set(\.accounts, to: accounts)
     }
+    
+    func createDefaultAccountIfNeeded() async throws -> Effect {
+        guard state.accounts.isEmpty else { return .none }
+        return . none
+    }
 }
 
 // MARK: Effect Mapping
@@ -70,7 +75,10 @@ fileprivate extension WagelyStore {
 fileprivate extension WagelyStore {
     @Sendable func mapAppIsInitialized(_ appIsInitialized: Bool) -> Effect {
         guard appIsInitialized else { return .none }
-        return .task(.loadAccounts, loadAccountsTask)
+        return .concatenate(
+            .task(.loadAccounts, loadAccountsTask),
+            .task(createDefaultAccountIfNeeded)
+        )
     }
 }
 
@@ -79,7 +87,7 @@ fileprivate extension WagelyStore {
 fileprivate extension WagelyStore {
     struct ErrorHandler {
         func handle(_ error: Error) -> Effect {
-            print("[WagelyStore] \(error)")
+            Log.error("[WagelyStore] \(error)")
             return .none
         }
     }
