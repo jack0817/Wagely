@@ -8,6 +8,10 @@
 import Foundation
 
 public extension Date {
+    func weekday(in cal: Calendar = .current) -> Int {
+        cal.component(.weekday, from: self)
+    }
+    
     func firstOfMonth(in cal: Calendar = .current) -> Date {
         var comps = cal.dateComponents([.year, .month], from: self)
         comps.day = 1

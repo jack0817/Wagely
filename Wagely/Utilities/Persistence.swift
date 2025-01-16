@@ -21,9 +21,8 @@ public final actor Persistence {
         guard executor == nil else { throw Error.alreadyInitiallyized }
         
         let schema = Schema([
-            Account.self,
+            AccountModel.self,
         ])
-        
         
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
@@ -40,10 +39,23 @@ public final actor Persistence {
         }
     }
     
-    public func fetch<Model: PersistentModel>(_ model: Model.Type) async throws -> [Model] {
+    public func save() async throws {
         guard let executor else { throw Error.notInitialized }
-        let descriptor = FetchDescriptor<Model>()
-        return try executor.modelContext.fetch(descriptor)
+        try executor.modelContext.save()
+    }
+    
+    public func insert<P: Persistable>(_ P: P) async throws {
+        guard let context = executor?.modelContext else { throw Error.notInitialized }
+        await context.insert(try P.model())
+        try await save()
+    }
+    
+    public func fetch<P: Persistable>(_ modelType: P.Type) async throws -> [P] {
+        guard let context = executor?.modelContext else { throw Error.notInitialized }
+        let descriptor = FetchDescriptor<P.Model>()
+        
+        let models = try context.fetch(descriptor)
+        return try models.map { try P(model: $0) }
     }
 }
 
@@ -52,6 +64,15 @@ public extension Persistence {
         case alreadyInitiallyized
         case notInitialized
     }
+}
+
+// Persistable
+
+public protocol Persistable {
+    associatedtype Model: PersistentModel
+    
+    init(model: Model) throws
+    func model() async throws -> Model
 }
 
 // AsyncStore Environment

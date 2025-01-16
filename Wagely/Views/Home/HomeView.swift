@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct HomeView: View {
-    @Environment(WagelyStore.self) private var wagelyStore
+    @Environment(AccountsStore.self) private var accountsStore
     @Environment(\.theme) private var theme
     @State private var homeNavStore = HomeNavigationStore()
     
@@ -30,16 +30,15 @@ struct HomeView: View {
         GeometryReader { geo in
             VStack {
                 MonthSelectorView(
-                    selectedMonth: wagelyStore.binding(for: \.selectedMonth),
+                    selectedMonth: accountsStore.binding(for: \.selectedMonth),
                     in: geo.size
                 )
                 
-                Button("Test Presentation") {
-                    homeNavStore.present(.congrats)
-                }
+                MonthSummaryView(summary: accountsStore.monthSummary)
+                    .padding(16.0)
             }
             .frame(maxHeight: .infinity, alignment: .top)
-            .animation(.easeInOut, value: wagelyStore.selectedMonth)
+            .animation(.easeInOut, value: accountsStore.selectedMonth)
         }
         .background(theme.color(.background).edgesIgnoringSafeArea(.all))
         .navigationTitle("Wagely")
@@ -65,6 +64,5 @@ struct HomeView: View {
 
 #Preview {
     HomeView()
-        .background(Theme(.standard).color(.background))
-        .environment(WagelyStore())
+        .environment(AccountsStore())
 }

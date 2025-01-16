@@ -37,6 +37,9 @@ extension Theme {
 
 extension Theme {
     enum Font {
+        case heading1
+        case heading2
+        case heading3
         case body
     }
 }

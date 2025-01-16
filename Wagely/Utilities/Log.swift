@@ -77,6 +77,7 @@ public extension Log {
 public extension Log {
     static let dateFormatter = {
         let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd hh:mm:ss:SSSS"
         return formatter
     }()
     

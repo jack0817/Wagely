@@ -19,6 +19,12 @@ public struct StandardTheme: ThemeProvider {
     
     func font(_ themeFont: Theme.Font) -> SwiftUI.Font {
         switch themeFont {
+        case .heading1:
+            .title
+        case .heading2:
+            .title2
+        case .heading3:
+            .title3
         case .body:
             .body
         }

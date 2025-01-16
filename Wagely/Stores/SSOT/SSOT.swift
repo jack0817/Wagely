@@ -9,18 +9,18 @@ import SwiftUI
 
 public struct SSOT: ViewModifier {
     let appStore: AppStore
-    let wagelyStore: WagelyStore
+    let accountsStore: AccountsStore
     
     public init () {
         appStore = .init()
-        wagelyStore = .init()
+        accountsStore = .init()
         
-        wagelyStore.bind(to: appStore)
+        accountsStore.bind(to: appStore)
     }
     
     public func body(content: Content) -> some View {
         content
-            .environment(wagelyStore)
+            .environment(accountsStore)
             .environment(appStore)
     }
 }
