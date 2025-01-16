@@ -33,6 +33,7 @@ public struct WagelyPrimaryButtonStyle: ButtonStyle {
             .frame(maxWidth: .infinity, alignment: .center)
             .padding(.horizontal, 16.0)
             .frame(height: 44.0)
+            .contentShape(RoundedRectangle(cornerRadius: 22.0))
             .background {
                 RoundedRectangle(cornerRadius: 22.0).fill(theme.color(.accent))
             }
@@ -58,6 +59,7 @@ public struct WagelySecondaryButtonStyle: ButtonStyle {
             .frame(maxWidth: .infinity, alignment: .center)
             .padding(.horizontal, 16.0)
             .frame(height: 44.0)
+            .contentShape(RoundedRectangle(cornerRadius: 22.0))
             .background {
                 RoundedRectangle(cornerRadius: 22.0)
                     .stroke(theme.color(.accent), lineWidth: 2.0)
@@ -90,7 +92,23 @@ public extension View {
 // MARK: Previews
 
 #Preview {
-    ScrollView {
+    func section<Content: View>(
+        _ title: String,
+        @ViewBuilder content: () -> Content
+    ) -> some View {
+        VStack(spacing: 0.0) {
+            Text(title)
+                .font(Theme(.standard).font(.heading2))
+                .frame(maxWidth: .infinity, alignment: .leading)
+            
+            Divider()
+                .padding(.bottom, 16.0)
+            
+            content()
+        }
+    }
+    
+    func buttonsView() -> some View  {
         VStack {
             Button("Primary") {}
                 .buttonStyle(.primary)
@@ -98,6 +116,17 @@ public extension View {
             Button("Secondary") {}
                 .buttonStyle(.secondary)
         }
-        .padding()
+    }
+    
+    return NavigationStack {
+        ScrollView {
+            VStack(spacing: 32.0) {
+                section("Buttons") { buttonsView() }
+                
+                section("Buttons Disabled 2") { buttonsView().disabled(true) }
+            }
+            .padding(.horizontal, 16.0)
+        }
+        .navigationTitle("Styles")
     }
 }

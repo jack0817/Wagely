@@ -62,7 +62,8 @@ public struct MonthView: View {
         case .none:
             EmptyView()
         case .workDay:
-            Circle().fill(.blue)
+            Circle().stroke(.blue, lineWidth: 2.0)
+                .padding(1.0)
         }
     }
     
@@ -82,7 +83,7 @@ public extension MonthView {
             case .none:
                 theme.color(.backgroundInverse)
             case .workDay:
-                theme.color(.background)
+                theme.color(.backgroundInverse)
             }
         }
     }

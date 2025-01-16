@@ -53,7 +53,7 @@ struct HomeView: View {
     @ViewBuilder func destinationView(for item: HomeNavigationItem) -> some View {
         switch item {
         case .accountSummaryDetails:
-            AccountSummaryDetailsView()
+            AccountDetailsView()
         }
     }
     

@@ -18,6 +18,12 @@ public extension Date {
         return cal.date(from: comps) ?? self
     }
     
+    func lastOfMonth(in cal: Calendar = .current) -> Date {
+        var comps = cal.dateComponents([.year, .month], from: self)
+        comps.day = self.daysInMonthRange().upperBound
+        return cal.date(from: comps) ?? self
+    }
+    
     func day(of day: Int, in cal: Calendar = .current) -> Date {
         var comps = cal.dateComponents([.year, .month], from: self)
         comps.day = day
