@@ -82,11 +82,9 @@ public extension Account {
     func isWorkDay(_ day: Date) -> Bool {
         workDays.contains(day.weekday())
     }
-}
-
-public extension [Account] {
-    func isWorkDay(_ day: Date) -> Bool {
-        contains(where: { $0.isWorkDay(day) })
+    
+    func dueDate(from month: Date) -> Date {
+        month.lastOfMonth().add(days: billing.days)
     }
 }
 

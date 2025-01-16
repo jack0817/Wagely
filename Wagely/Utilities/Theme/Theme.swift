@@ -47,6 +47,7 @@ extension Theme {
         case heading3
         case body
         case action
+        case caption
     }
 }
 

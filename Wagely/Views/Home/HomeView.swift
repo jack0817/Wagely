@@ -34,14 +34,14 @@ struct HomeView: View {
                     in: geo.size
                 ) { dayState(for: $0) }
                 
-                MonthSummaryView(summary: accountsStore.monthSummary)
+                ScrollView {
+                    VStack(spacing: 32.0) {
+                        MonthSummaryView(summary: accountsStore.monthSummary)
+                        
+                        DueDateView()
+                    }
                     .padding(.horizontal, 16.0)
-                
-                Button(action: { navStore.navigate(to: .accountSummaryDetails) }) {
-                    Label("Accounts", systemImage: "chevron.right")
                 }
-                .buttonStyle(.primary)
-                .padding(.horizontal, 16.0)
             }
             .frame(maxHeight: .infinity, alignment: .top)
             .animation(.easeInOut, value: accountsStore.selectedMonth)
@@ -53,7 +53,7 @@ struct HomeView: View {
     @ViewBuilder func destinationView(for item: HomeNavigationItem) -> some View {
         switch item {
         case .accountSummaryDetails:
-            AccountDetailsView()
+            Text("Comin Soon")
         }
     }
     
@@ -70,7 +70,7 @@ struct HomeView: View {
 
 extension HomeView {
     func dayState(for day: Date) -> MonthView.DayState {
-        accountsStore.accounts.isWorkDay(day) ? .workDay : .none
+        accountsStore.accounts.contains { $0.isWorkDay(day) } ? .workDay : .none
     }
 }
 

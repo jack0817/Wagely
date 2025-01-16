@@ -14,14 +14,6 @@ struct MonthSummaryView: View {
         case days = "Total Days"
         
         var id: String { rawValue }
-        
-        func font(in theme: Theme) -> Font {
-            switch self {
-            case .wages: theme.font(.heading2)
-            case .hours: theme.font(.heading3)
-            case .days: theme.font(.heading3)
-            }
-        }
     }
     
     let summary: MonthSummary
@@ -33,7 +25,11 @@ struct MonthSummaryView: View {
     }
     
     var body: some View {
-        VStack {
+        VStack(spacing: 8.0) {
+            Text("Summary")
+                .font(theme.font(.heading3).bold())
+                .frame(maxWidth: .infinity, alignment: .leading)
+            
             ForEach(SummarySection.allCases) { section in
                 listTemplate(for: section.rawValue) {
                     switch section {
@@ -46,7 +42,7 @@ struct MonthSummaryView: View {
                         Text(summary.workDays, format: .number)
                     }
                 }
-                .font(section.font(in: theme))
+                .font(theme.font(.body))
             }
         }
     }

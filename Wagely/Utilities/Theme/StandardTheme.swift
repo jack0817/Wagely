@@ -31,6 +31,8 @@ public struct StandardTheme: ThemeProvider {
             .body
         case .action:
             .headline.weight(.bold)
+        case .caption:
+            .caption
         }
     }
 }
