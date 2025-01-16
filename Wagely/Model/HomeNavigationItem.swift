@@ -8,7 +8,7 @@
 import Foundation
 
 public enum HomeNavigationItem: String {
-    case details
+    case accountSummaryDetails
 }
 
 extension HomeNavigationItem: Identifiable {

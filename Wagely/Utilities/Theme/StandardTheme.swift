@@ -10,6 +10,8 @@ import SwiftUI
 public struct StandardTheme: ThemeProvider {
     func color(_ themeColor: Theme.Color) -> SwiftUI.Color {
         switch themeColor {
+        case .accent:
+            Color.blue
         case .background:
             .init("Colors/Standard/background")
         case .backgroundInverse:
@@ -27,6 +29,8 @@ public struct StandardTheme: ThemeProvider {
             .title3
         case .body:
             .body
+        case .action:
+            .headline.weight(.bold)
         }
     }
 }

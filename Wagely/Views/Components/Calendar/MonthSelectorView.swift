@@ -10,13 +10,19 @@ import SwiftUI
 struct MonthSelectorView: View {
     @Binding private var selectedMonth: Date
     let size: CGSize
+    let dayState: (Date) -> MonthView.DayState
     
     @Environment(\.calendar) private var calendar
     @Environment(\.theme) private var theme
     
-    public init(selectedMonth: Binding<Date>, in size: CGSize) {
+    public init(
+        selectedMonth: Binding<Date>,
+        in size: CGSize,
+        dayState: @escaping (Date) -> MonthView.DayState
+    ) {
         self._selectedMonth = selectedMonth
         self.size = size
+        self.dayState = dayState
     }
     
     var body: some View {
@@ -26,7 +32,12 @@ struct MonthSelectorView: View {
                 .padding(.bottom, 16.0)
             
             weekdayView(in: size)
-            MonthView(month: selectedMonth.firstOfMonth(), size: size)
+            
+            MonthView(
+                month: selectedMonth.firstOfMonth(),
+                size: size,
+                dayState: dayState
+            )
         }
     }
     
@@ -85,8 +96,10 @@ struct MonthSelectorView: View {
         
         var body: some View  {
             GeometryReader { geo in
-                MonthSelectorView(selectedMonth: $month, in: geo.size)
-                    .frame(height: geo.size.height * 0.5)
+                MonthSelectorView(selectedMonth: $month, in: geo.size) { day in
+                    .workDay
+                }
+                .frame(height: geo.size.height * 0.5)
             }
         }
     }

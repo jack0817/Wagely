@@ -16,6 +16,7 @@ public final class AccountModel_V1 {
     var workDays: [Int]
     var hoursPerDay: Double
     var hourlyWage: Double
+    var billing: Int
     
     init(
         appId: String,
@@ -23,7 +24,8 @@ public final class AccountModel_V1 {
         dateCreated: Date,
         workDays: [Int],
         hoursPerDay: Double,
-        hourlyWage: Double
+        hourlyWage: Double,
+        billing: Int
     ) {
         self.appId = appId
         self.name = name
@@ -31,6 +33,7 @@ public final class AccountModel_V1 {
         self.workDays = workDays
         self.hoursPerDay = hoursPerDay
         self.hourlyWage = hourlyWage
+        self.billing = billing
     }
 }
 

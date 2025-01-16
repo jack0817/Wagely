@@ -40,12 +40,6 @@ public struct SummaryService {
     }
 }
 
-fileprivate extension Account {
-    func isWorkDay(_ day: Date) -> Bool {
-        workDays.contains(day.weekday())
-    }
-}
-
 // MARK: AsyncStore Environment
 
 enum SummaryServiceEnvironmentKey: AsyncStoreEnvironmentKey {

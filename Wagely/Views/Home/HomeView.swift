@@ -10,17 +10,17 @@ import SwiftUI
 struct HomeView: View {
     @Environment(AccountsStore.self) private var accountsStore
     @Environment(\.theme) private var theme
-    @State private var homeNavStore = HomeNavigationStore()
+    @State private var navStore = HomeNavigationStore()
     
     var body: some View {
-        NavigationStack(path: homeNavStore.binding(for: \.stack)) {
+        NavigationStack(path: navStore.binding(for: \.stack)) {
             mainContent()
                 .navigationDestination(
                     for: HomeNavigationItem.self,
                     destination: destinationView
                 )
                 .sheet(
-                    item: homeNavStore.binding(for: \.presentedSheetItem),
+                    item: navStore.binding(for: \.presentedSheetItem),
                     content: presentedView
                 )
         }
@@ -28,14 +28,20 @@ struct HomeView: View {
     
     func mainContent() -> some View {
         GeometryReader { geo in
-            VStack {
+            VStack(spacing: 32.0) {
                 MonthSelectorView(
                     selectedMonth: accountsStore.binding(for: \.selectedMonth),
                     in: geo.size
-                )
+                ) { dayState(for: $0) }
                 
                 MonthSummaryView(summary: accountsStore.monthSummary)
-                    .padding(16.0)
+                    .padding(.horizontal, 16.0)
+                
+                Button(action: { navStore.navigate(to: .accountSummaryDetails) }) {
+                    Label("Accounts", systemImage: "chevron.right")
+                }
+                .buttonStyle(.primary)
+                .padding(.horizontal, 16.0)
             }
             .frame(maxHeight: .infinity, alignment: .top)
             .animation(.easeInOut, value: accountsStore.selectedMonth)
@@ -46,8 +52,8 @@ struct HomeView: View {
     
     @ViewBuilder func destinationView(for item: HomeNavigationItem) -> some View {
         switch item {
-        case .details:
-            Text("Details")
+        case .accountSummaryDetails:
+            AccountSummaryDetailsView()
         }
     }
     
@@ -55,14 +61,26 @@ struct HomeView: View {
         switch item {
         case .congrats:
             VStack {
-                Text("Contgrats")
-                Button("Dismiss") { homeNavStore.dismiss() }
+                Text("Congrats")
+                Button("Dismiss") { navStore.dismiss() }
             }
         }
     }
 }
 
+extension HomeView {
+    func dayState(for day: Date) -> MonthView.DayState {
+        accountsStore.accounts.isWorkDay(day) ? .workDay : .none
+    }
+}
+
 #Preview {
+    let previewState = AccountsState(
+        selectedMonth: .now.firstOfMonth(),
+        accounts: [.defaultAccount]
+    )
+    
     HomeView()
-        .environment(AccountsStore())
+        .environment(AccountsStore(previewState))
+        .wagelyStyles()
 }

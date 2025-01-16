@@ -21,6 +21,7 @@ struct AppView: View {
             }
         }
         .theme(.standard)
+        .wagelyStyles()
         .onAppear(perform: appStore.initializeApp)
     }
     
@@ -36,5 +37,5 @@ struct AppView: View {
 
 #Preview {
     AppView()
-        .environment(AppStore())
+        .modifier(SSOT())
 }

@@ -15,13 +15,15 @@ public struct Account: Equatable {
     let workDays: [Int]
     let hoursPerDay: Double
     let hourlyWage: Double
+    let billing: Billing
     
     public init(
         name: String,
         dateCreated: Date,
         workDays: [Int],
         hoursPerDay: Double,
-        hourlyWage: Double
+        hourlyWage: Double,
+        billing: Billing
     ) {
         self.appId = UUID().uuidString
         self.name = name
@@ -29,6 +31,7 @@ public struct Account: Equatable {
         self.workDays = workDays
         self.hoursPerDay = hoursPerDay
         self.hourlyWage = hourlyWage
+        self.billing = billing
     }
 }
 
@@ -46,6 +49,7 @@ extension Account: Persistable {
         self.workDays = model.workDays
         self.hoursPerDay = model.hoursPerDay
         self.hourlyWage = model.hourlyWage
+        self.billing = Billing(days: model.billing)
     }
     
     public func model() async throws -> AccountModel {
@@ -55,7 +59,8 @@ extension Account: Persistable {
             dateCreated: dateCreated,
             workDays: workDays,
             hoursPerDay: hoursPerDay,
-            hourlyWage: hourlyWage
+            hourlyWage: hourlyWage,
+            billing: billing.days
         )
     }
 }
@@ -67,8 +72,21 @@ public extension Account {
             dateCreated: .now,
             workDays: .defaultWorkDays,
             hoursPerDay: 8.0,
-            hourlyWage: 130.0
+            hourlyWage: 130.0,
+            billing: .net45
         )
+    }
+}
+
+public extension Account {
+    func isWorkDay(_ day: Date) -> Bool {
+        workDays.contains(day.weekday())
+    }
+}
+
+public extension [Account] {
+    func isWorkDay(_ day: Date) -> Bool {
+        contains(where: { $0.isWorkDay(day) })
     }
 }
 

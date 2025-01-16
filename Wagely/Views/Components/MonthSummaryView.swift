@@ -39,6 +39,7 @@ struct MonthSummaryView: View {
                     switch section {
                     case .wages:
                         Text(summary.wages, format: .currency(code: currencyCode))
+                            .textSelection(.enabled)
                     case .hours:
                         Text(summary.hours, format: .number.precision(.fractionLength(1)))
                     default:

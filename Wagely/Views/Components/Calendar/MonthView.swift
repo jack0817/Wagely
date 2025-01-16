@@ -7,14 +7,15 @@
 
 import SwiftUI
 
-struct MonthView: View {
+public struct MonthView: View {
     let month: Date
     let size: CGSize
+    let dayState: (Date) -> DayState
     
     @Environment(\.calendar) private var calendar
     @Environment(\.theme) private var theme
     
-    var body: some View {
+    public var body: some View {
         Grid(
             alignment: .center,
             horizontalSpacing: 0.0,
@@ -28,7 +29,8 @@ struct MonthView: View {
                                 let day = month.day(at: weekday, week: week),
                                 calendar.isDate(day, equalTo: month, toGranularity: .month)
                             {
-                                Text(day, format: .dateTime.day())
+                                dayView(for: day, dayState: dayState(day))
+                                    .padding(4.0)
                             } else {
                                 Color.clear
                             }
@@ -47,9 +49,42 @@ struct MonthView: View {
         calendar.weekdaySymbols.count
     }
     
+    func dayView(for day: Date, dayState: DayState) -> some View {
+        ZStack {
+            view(for: dayState)
+            Text(day, format: .dateTime.day())
+                .foregroundStyle(dayState.foregroundColor(in: theme))
+        }
+    }
+    
+    @ViewBuilder func view(for dayState: DayState) -> some View {
+        switch dayState {
+        case .none:
+            EmptyView()
+        case .workDay:
+            Circle().fill(.blue)
+        }
+    }
+    
     func dayDimension(in size: CGSize) -> CGFloat {
         guard size.width > 0 && weekdayCount > 0 else { return 0.0 }
         return size.width / CGFloat(weekdayCount)
+    }
+}
+
+public extension MonthView {
+    enum DayState {
+        case none
+        case workDay
+        
+        func foregroundColor(in theme: Theme) -> Color {
+            switch self {
+            case .none:
+                theme.color(.backgroundInverse)
+            case .workDay:
+                theme.color(.background)
+            }
+        }
     }
 }
 
@@ -57,7 +92,8 @@ struct MonthView: View {
     GeometryReader { geo in
         MonthView(
             month: Date.now.firstOfMonth(),
-            size: geo.size
+            size: geo.size,
+            dayState: { Calendar.current.isDateInWeekend($0) ? .none : .workDay }
         )
     }
 }
