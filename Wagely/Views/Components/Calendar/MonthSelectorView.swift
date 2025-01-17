@@ -14,6 +14,7 @@ struct MonthSelectorView: View {
     
     @Environment(\.calendar) private var calendar
     @Environment(\.theme) private var theme
+    @State private var showDatePicker = false
     
     public init(
         selectedMonth: Binding<Date>,
@@ -39,6 +40,10 @@ struct MonthSelectorView: View {
                 dayState: dayState
             )
         }
+        .sheet(isPresented: $showDatePicker) {
+            DatePickerSheetView(selection: $selectedMonth)
+                .presentationDetents([.medium])
+        }
     }
     
     func headerView() -> some View {
@@ -60,9 +65,15 @@ struct MonthSelectorView: View {
                     }
                 }
                 
-                Text(selectedMonth.firstOfMonth(), format: .dateTime.month(.wide))
-                    .font(.title)
-                    .frame(maxWidth: .infinity)
+                Button(
+                    action: { showDatePicker.toggle() },
+                    label: {
+                        Text(selectedMonth.firstOfMonth(), format: .dateTime.month(.wide))
+                            .font(.title)
+                            .contentShape(Rectangle())
+                    }
+                )
+                .frame(maxWidth: .infinity)
             }
             
             Text(selectedMonth, format: .dateTime.year())

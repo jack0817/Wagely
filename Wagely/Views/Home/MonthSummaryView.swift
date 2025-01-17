@@ -8,17 +8,35 @@
 import SwiftUI
 
 struct MonthSummaryView: View {
-    enum SummarySection: String, CaseIterable, Identifiable {
-        case wages = "Total Wages"
-        case hours = "Total Hours"
-        case days = "Total Days"
+    enum SummarySection: CaseIterable, Identifiable {
+        case wages
+        case hours
+        case days
         
-        var id: String { rawValue }
+        var title: String {
+            switch self {
+            case .wages: "Wages"
+            case .hours: "Hours"
+            case .days: "Days"
+            }
+        }
+        
+        var systemImage: String {
+            switch self {
+            case .wages: "dollarsign"
+            case .hours: "clock"
+            case .days: "calendar"
+            }
+        }
+        
+        var id: String { title }
     }
     
     let summary: MonthSummary
+    @Binding var isCollapsed: Bool
     
     @Environment(\.theme) private var theme
+    @Namespace private var namespace
     
     private var currencyCode: String  {
         Locale.current.currency?.identifier ?? "USD"
@@ -26,24 +44,69 @@ struct MonthSummaryView: View {
     
     var body: some View {
         VStack(spacing: 8.0) {
-            Text("Summary")
-                .font(theme.font(.heading3).bold())
-                .frame(maxWidth: .infinity, alignment: .leading)
+            HStack {
+                Text("Totals")
+                    .font(theme.font(.heading3).bold())
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                
+                Button(
+                    action: { isCollapsed.toggle() },
+                    label: {
+                        Image(systemName: "chevron.up")
+                            .rotation3DEffect(.degrees(isCollapsed ? 180.0 : 0.0), axis: (1.0, 0.0, 0.0))
+                    }
+                )
+            }
             
+            if isCollapsed {
+                HStack { sections() }
+            } else {
+                VStack { sections() }
+            }
+        }
+        .animation(.easeOut, value: isCollapsed)
+    }
+    
+    func sections() -> some View {
+        Group {
             ForEach(SummarySection.allCases) { section in
-                listTemplate(for: section.rawValue) {
-                    switch section {
-                    case .wages:
-                        Text(summary.wages, format: .currency(code: currencyCode))
-                            .textSelection(.enabled)
-                    case .hours:
-                        Text(summary.hours, format: .number.precision(.fractionLength(1)))
-                    default:
-                        Text(summary.workDays, format: .number)
+                if isCollapsed {
+                    VStack {
+                        Image(systemName: section.systemImage)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 16.0, height: 16.0)
+                        
+                        textView(for: section)
+                            .matchedGeometryEffect(id: section.title, in: namespace)
+                    }
+                    .frame(maxWidth: .infinity)
+                } else {
+                    HStack {
+                        Text(section.title)
+                        
+                        Line()
+                            .stroke(theme.color(.backgroundInverse))
+                            .frame(height: 1.0)
+                        
+                        textView(for: section)
+                            .matchedGeometryEffect(id: section.title, in: namespace)
                     }
                 }
-                .font(theme.font(.body))
             }
+        }
+    }
+    
+    @ViewBuilder
+    func textView(for section: MonthSummaryView.SummarySection) -> some View {
+        switch section {
+        case .wages:
+            Text(summary.wages, format: .currency(code: currencyCode))
+                .textSelection(.enabled)
+        case .hours:
+            Text(summary.hours, format: .number.precision(.fractionLength(1)))
+        case .days:
+            Text(summary.workDays, format: .number)
         }
     }
     
@@ -67,13 +130,22 @@ fileprivate extension MonthSummaryView {
 }
 
 #Preview {
-    MonthSummaryView(
-        summary: .init(
-            month: .now.firstOfMonth(),
-            workDays: 20,
-            hours: 180.0,
-            wages: 1000.0
-        )
-    )
-    .padding()
+    struct Preview: View {
+        @State private var isCollapsed = false
+        
+        var body: some View {
+            MonthSummaryView(
+                summary: .init(
+                    month: .now.firstOfMonth(),
+                    workDays: 20,
+                    hours: 180.0,
+                    wages: 1000.0
+                ),
+                isCollapsed: $isCollapsed
+            )
+            .padding()
+        }
+    }
+    
+    return Preview()
 }

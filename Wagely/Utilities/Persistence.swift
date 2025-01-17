@@ -50,10 +50,13 @@ public final actor Persistence {
         try await save()
     }
     
-    public func fetch<P: Persistable>(_ modelType: P.Type) async throws -> [P] {
+    public func fetch<P: Persistable>(
+        _ modelType: P.Type,
+        where predicate: Predicate<P.Model> = .true
+    ) async throws -> [P] {
         guard let context = executor?.modelContext else { throw Error.notInitialized }
-        let descriptor = FetchDescriptor<P.Model>()
         
+        let descriptor = FetchDescriptor<P.Model>(predicate: predicate)
         let models = try context.fetch(descriptor)
         return try models.map { try P(model: $0) }
     }

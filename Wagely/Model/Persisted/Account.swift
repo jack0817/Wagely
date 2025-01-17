@@ -72,7 +72,7 @@ public extension Account {
             dateCreated: .now,
             workDays: .defaultWorkDays,
             hoursPerDay: 8.0,
-            hourlyWage: 130.0,
+            hourlyWage: 40.0,
             billing: .net45
         )
     }

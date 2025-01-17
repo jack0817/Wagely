@@ -11,6 +11,7 @@ struct HomeView: View {
     @Environment(AccountsStore.self) private var accountsStore
     @Environment(\.theme) private var theme
     @State private var navStore = HomeNavigationStore()
+    @AppStorage(AppStorageKey.homeSummaryIsCollapsed.rawValue) private var isSummaryCollapsed = false
     
     var body: some View {
         NavigationStack(path: navStore.binding(for: \.stack)) {
@@ -36,7 +37,10 @@ struct HomeView: View {
                 
                 ScrollView {
                     VStack(spacing: 32.0) {
-                        MonthSummaryView(summary: accountsStore.monthSummary)
+                        MonthSummaryView(
+                            summary: accountsStore.monthSummary,
+                            isCollapsed: $isSummaryCollapsed
+                        )
                         
                         DueDateView()
                     }
@@ -45,6 +49,7 @@ struct HomeView: View {
             }
             .frame(maxHeight: .infinity, alignment: .top)
             .animation(.easeInOut, value: accountsStore.selectedMonth)
+            .animation(.easeOut, value: isSummaryCollapsed)
         }
         .background(theme.color(.background).edgesIgnoringSafeArea(.all))
         .navigationTitle("Wagely")
