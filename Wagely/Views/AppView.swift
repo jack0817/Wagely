@@ -11,7 +11,7 @@ struct AppView: View {
     @Environment(AppStore.self) private var appStore
     
     var body: some View {
-        TabView(selection: .constant(appStore.selectedTab)) {
+        TabView(selection: appStore.binding(for: \.selectedTab)) {
             ForEach(appStore.tabs) { tab in
                 Tab(
                     tab.title,
@@ -20,6 +20,9 @@ struct AppView: View {
                 ) { view(for: tab) }
             }
         }
+        .theme(.standard)
+        .wagelyStyles()
+        .onAppear(perform: appStore.initializeApp)
     }
     
     @ViewBuilder func view(for tab: AppTab) -> some View {
@@ -33,6 +36,10 @@ struct AppView: View {
 }
 
 #Preview {
-    AppView()
-        .environment(AppStore())
+    let accountState = AccountsState(accounts: [.defaultAccount])
+    
+    return AppView()
+        .environment(\.locale, .init(identifier: "es_ES"))
+        .environment(AccountsStore(accountState))
+        .modifier(SSOT())
 }

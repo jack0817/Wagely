@@ -28,15 +28,26 @@ struct Theme {
     }
 }
 
+// MARK: Colors
+
 extension Theme {
     enum Color {
+        case accent
         case background
+        case backgroundInverse
     }
 }
 
+// MARK: Fonts
+
 extension Theme {
     enum Font {
+        case heading1
+        case heading2
+        case heading3
         case body
+        case action
+        case caption
     }
 }
 

@@ -22,7 +22,7 @@ public extension AppTab {
     
     var systemImageName: String {
         switch self {
-        case .home: return "house"
+        case .home: return "calendar"
         case .settings: return "gearshape"
         }
     }
