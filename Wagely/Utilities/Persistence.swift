@@ -20,14 +20,12 @@ public final actor Persistence {
     public func initializeDatabase() async throws {
         guard executor == nil else { throw Error.alreadyInitiallyized }
         
-        let schema = Schema([
-            AccountModel.self,
-        ])
-        
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
         do {
-            let container = try ModelContainer(for: schema, configurations: [modelConfiguration])
+            let container = try ModelContainer(
+                for: Schema(versionedSchema: WagelyShema_V1.self),
+                migrationPlan: WagelyMigrationPlan.self
+            )
+            
             self.executor = DefaultSerialModelExecutor(modelContext: .init(container))
             Log.info("Persistence inialized")
         } catch {
