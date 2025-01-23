@@ -8,7 +8,7 @@
 import Foundation
 import SwiftData
 
-extension WagelyShema_V1 {
+extension WagelySchema_V1 {
     @Model
     public final class AccountModel {
         var appId: String
@@ -39,4 +39,4 @@ extension WagelyShema_V1 {
     }
 }
 
-public typealias AccountModel = WagelyShema_V1.AccountModel
+public typealias AccountModel = WagelySchema_V1.AccountModel

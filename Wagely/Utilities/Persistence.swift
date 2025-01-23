@@ -22,7 +22,7 @@ public final actor Persistence {
         
         do {
             let container = try ModelContainer(
-                for: Schema(versionedSchema: WagelyShema_V1.self),
+                for: .init(versionedSchema: WagelySchema.self),
                 migrationPlan: WagelyMigrationPlan.self
             )
             
