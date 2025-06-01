@@ -9,7 +9,7 @@ import AsyncStore
 
 // MARK: Task Key
 
-public enum AppStoreKey: AsyncTaskKey {
+public enum AppStoreKey: Hashable {
     case initializeApp
 }
 
@@ -33,17 +33,18 @@ public struct AppState {
 
 // MARK: Store
 
-public typealias AppStore = AsyncStore<AppStoreKey, AppState>
+public typealias AppStore = AsyncStore<AppState, AppStoreKey>
 
 // MARK: Public API
 
 public extension AppStore {
-    convenience init(_ state: AppState = .init()) {
-        self.init(state, mapError: ErrorHandler().handle)
+    convenience init(state: AppState = .init()) {
+        self.init(state)
+        self.errorHandler = { _ in .none }
     }
 
     func initializeApp() {
-        receive(.task(.initializeApp, initializeApp))
+        run(.task(.initializeApp, initializeApp))
     }
 }
 
@@ -54,6 +55,15 @@ fileprivate extension AppStore {
         setLogLevel()
         try await env.persistence.initializeDatabase()
         return .set(\.isAppInitialized, to: true)
+    }
+    
+}
+
+// MARK: Error Handling
+
+fileprivate extension AppStore {
+    func handle(_ error: Error) -> Effect {
+        return .none
     }
 }
 
@@ -66,16 +76,5 @@ fileprivate extension AppStore {
 #else
         Log.setLevel(to: .debug)
 #endif
-    }
-}
-
-// MARK: Error Handling
-
-fileprivate extension AppStore {
-    struct ErrorHandler {
-        func handle(_ error: Error) -> Effect {
-            Log.error("[AppStore] error \(error)")
-            return .none
-        }
     }
 }

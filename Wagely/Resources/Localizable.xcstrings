@@ -1,10 +1,8 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "" : {
-
-    },
     "/hr" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -19,12 +17,6 @@
           }
         }
       }
-    },
-    "Account" : {
-
-    },
-    "Add" : {
-
     },
     "Add Exception" : {
 
@@ -46,6 +38,7 @@
       }
     },
     "Coming Soon" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -129,6 +122,7 @@
       }
     },
     "Due Dates" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -176,7 +170,7 @@
         }
       }
     },
-    "Hourly Wage" : {
+    "Home View" : {
 
     },
     "Hours" : {
@@ -212,10 +206,8 @@
         }
       }
     },
-    "Overrides" : {
-
-    },
     "Totals" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -232,6 +224,7 @@
       }
     },
     "Wagely" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {

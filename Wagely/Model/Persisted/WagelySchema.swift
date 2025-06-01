@@ -17,6 +17,16 @@ public enum WagelySchema_V1: VersionedSchema {
     }
 }
 
+// MARK: V2
+
+public enum WagelySchema_V2: VersionedSchema {
+    public static var versionIdentifier: Schema.Version { .init(2, 0, 0) }
+    
+    public static var models: [any PersistentModel.Type] {
+        [WagelySchema_V1.AccountModel.self]
+    }
+}
+
 public typealias WagelySchema = WagelySchema_V1
 
 // MARK: Migration Plan

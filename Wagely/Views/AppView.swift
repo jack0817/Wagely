@@ -36,10 +36,8 @@ struct AppView: View {
 }
 
 #Preview {
-    let accountState = AccountsState(accounts: [.defaultAccount])
     
     return AppView()
         .environment(\.locale, .init(identifier: "es_ES"))
-        .environment(AccountsStore(accountState))
         .modifier(SSOT())
 }

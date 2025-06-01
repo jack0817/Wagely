@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-protocol ThemeProvider {
+public protocol ThemeProvider {
     func color(_ themeColor: Theme.Color) -> SwiftUI.Color
     func font(_ themeFont: Theme.Font) -> SwiftUI.Font
 }
 
-struct Theme {
+public struct Theme {
     let provider: ThemeProvider
     
     init(_ provider: ThemeProvider) {
@@ -30,24 +30,59 @@ struct Theme {
 
 // MARK: Colors
 
-extension Theme {
-    enum Color {
+public extension Theme {
+    enum Color: CaseIterable, Hashable {
         case accent
         case background
         case backgroundInverse
     }
 }
 
+extension Theme.Color: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        switch self {
+        case .accent:
+            return "Accent"
+        case .background:
+            return "Background"
+        case .backgroundInverse:
+            return "Background Inverse"
+        }
+    }
+}
+
 // MARK: Fonts
 
-extension Theme {
-    enum Font {
+public extension Theme {
+    enum Font: CaseIterable, Hashable {
         case heading1
         case heading2
         case heading3
+        case heading4
         case body
         case action
         case caption
+    }
+}
+
+extension Theme.Font: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        switch self {
+        case .heading1:
+            return "Heading 1"
+        case .heading2:
+            return "Heading 2"
+        case .heading3:
+            return "Heading 3"
+        case .heading4:
+            return "Heding 4"
+        case .body:
+            return "Body"
+        case .action:
+            return "Action"
+        case .caption:
+            return "Caption"
+        }
     }
 }
 
